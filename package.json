@@ -15,11 +15,10 @@
     "bcryptjs": "*",
     "body-parser": "*",
     "cors": "*",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
+    "express": "*",
     "express-promise-router": "^4.1.0",
     "jsonwebtoken": "*",
-    "passport": "*",
+    "passport": "^0.4.1",
     "passport-jwt": "*",
     "pg": "^8.7.1",
     "sequelize": "^6.7.0"
