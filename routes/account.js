@@ -1,16 +1,22 @@
-import Router from 'express-promise-router'
+import express from "express";
+//import Router from 'express-promise-router'
 import {usersController} from '../controllers/index.js'
-import {User} from "../model/users.js";
+import passport from 'passport'
 
-const routerAuthRegDashboard = Router()
+const routerAuthRegDashboard = express.Router()
 
-routerAuthRegDashboard.route("/account/reg").post(usersController.create);
+routerAuthRegDashboard.post("/account/reg", usersController.create)
 
-routerAuthRegDashboard.route("/account/auth").get((req, res) => {
+routerAuthRegDashboard.get("/account/auth", (req, res) => {
     res.send('Страница авторизации')
 })
-routerAuthRegDashboard.route("/account/dashboard").get((req, res) => {
-    res.send('Страница  кабинета пользователя')
+
+routerAuthRegDashboard.get("/account/dashboard", passport.authenticate('local', {session: false}), (req, res) => {
+    try{
+        res.send("Страница пользователя")
+    } catch (err) {
+       res.send(err)
+    }
 })
 
 export {routerAuthRegDashboard}

@@ -1,26 +1,39 @@
-import {User} from '../model/users.js'
-import {secret} from "./db.js";
-import * as passportJWT from 'passport-jwt';
+import {usersController} from "../controllers/index.js";
 
-function auth (passport) {
+import PasportLocal from 'passport-local';
+const LocalStrategy = PasportLocal.Strategy;
 
-    let JwtStrategy = passportJWT.Strategy,
-        ExtractJwt = passportJWT.ExtractJwt;
-    let opts = {}
-    opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-    opts.secretOrKey = secret;
-    passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-        User.findOne({id: jwt_payload.sub}, function(err, user) {
-            if (err) {
-                return done(err, false);
-            }
-            if (user) {
+export default (passport) => {
+    passport.use(
+        new LocalStrategy((login, password, done) => {
+            usersController.GetUserByLogin({ params: login}, (err, user) => {
+                if (err) {
+                    return done(err, false);
+                }
+                if (!user) {
+                    return done(null, false, { msg: "Incorrect username" });
+                }
+                if (user.password !== password) {
+                    return done(null, false, { msg: "Incorrect password" });
+                }
                 return done(null, user);
-            } else {
-                return done(null, false);
-            }
-        });
-    }));
-}
+            });
+        })
+    );
 
-export {auth}
+    passport.serializeUser(function (user, done) {
+        log('serialization', user);
+        done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+
+        log('deserialization');
+        let user_obj = {
+            id: 1,
+            login: 'test_login'
+        };
+
+        done(null, user_obj)
+    });
+}
