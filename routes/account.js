@@ -11,12 +11,20 @@ routerAuthRegDashboard.get("/account/auth", (req, res) => {
     res.send('Страница авторизации')
 })
 
-routerAuthRegDashboard.get("/account/dashboard", passport.authenticate('local', {session: false}), (req, res) => {
-    try{
-        res.send("Страница пользователя")
-    } catch (err) {
-       res.send(err)
-    }
-})
+/*routerAuthRegDashboard.post('/login', (req, res, next) => {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) { return next(err); }
+        if (!user) { return res.redirect('/login'); }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            return res.redirect('/account/dashboard' + user.login);
+        });
+    })(req, res, next);}
+    )
+
+routerAuthRegDashboard.get('/account/dashboard', auth(), (req, res) => {
+    res.send("Добро пожаловть пользователь")
+})*/
 
 export {routerAuthRegDashboard}
+

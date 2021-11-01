@@ -1,4 +1,5 @@
 import {usersController} from "../controllers/index.js";
+import {User} from "../model/users.js";
 
 import PasportLocal from 'passport-local';
 const LocalStrategy = PasportLocal.Strategy;
@@ -21,19 +22,16 @@ export default (passport) => {
         })
     );
 
-    passport.serializeUser(function (user, done) {
-        log('serialization', user);
+    passport.serializeUser(function (user, done) { //сериализация, что будем хранить в сессии
+        console.log('serialization', user);
         done(null, user.id);
     });
 
-    passport.deserializeUser((id, done) => {
-
-        log('deserialization');
-        let user_obj = {
-            id: 1,
-            login: 'test_login'
-        };
-
-        done(null, user_obj)
+    passport.deserializeUser((id, done) => { //десериализация
+        User.findByPk(id)
+            .then((user) => {
+                done(null, user)
+            })
+            .catch(err => done(err))
     });
 }
