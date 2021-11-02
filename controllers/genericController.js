@@ -42,4 +42,4 @@ const genericCrud = (model) => {
     }
 }
 
-export {genericCrud}
+module.exports = genericCrud

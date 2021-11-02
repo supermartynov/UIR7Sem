@@ -1,8 +1,5 @@
-import express from "express";
-//import Router from 'express-promise-router'
-import {usersController} from '../controllers/index.js'
-import passport from 'passport'
-
+let {usersController} = require("../controllers/index");
+let express = require("express");
 const routerAuthRegDashboard = express.Router()
 
 routerAuthRegDashboard.post("/account/reg", usersController.create)
@@ -26,5 +23,5 @@ routerAuthRegDashboard.get('/account/dashboard', auth(), (req, res) => {
     res.send("Добро пожаловть пользователь")
 })*/
 
-export {routerAuthRegDashboard}
+module.exports = routerAuthRegDashboard;
 

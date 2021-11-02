@@ -1,6 +1,6 @@
-import {genericCrud} from './genericController.js'
-import {User} from '../model/users.js'
-import bcrypt from 'bcrypt'
+let genericCrud  = require('./genericController.js')
+let User = require ('../model/users.js');
+let bcrypt = require('bcrypt');
 
 const usersController = genericCrud(User)
 usersController.GetUserByLogin = async ({ params: {login}}, res) => {
@@ -33,4 +33,4 @@ usersController.create = async ({body}, res) => {
     }
 }
 
-export {usersController}
+module.exports = usersController;

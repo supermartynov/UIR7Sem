@@ -1,4 +1,5 @@
-import {Sequelize, DataTypes, Model, sequelize} from "../config/db.js"
+const { Sequelize, DataTypes, Model, sequelize } = require('../config/db.js');
+
 
 class User extends Model{}
 User.init({
@@ -32,4 +33,4 @@ User.init({
 
 // await sequelize.sync(({ force: true }));
 
-export {User}
+module.exports = User

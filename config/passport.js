@@ -1,10 +1,9 @@
-import {usersController} from "../controllers/index.js";
-import {User} from "../model/users.js";
+let userController = require("../controllers/index.js");
+let User = require("../model/users.js");
 
-import PasportLocal from 'passport-local';
-const LocalStrategy = PasportLocal.Strategy;
+let LocalStrategy = require('passport-local').Strategy;
 
-export default (passport) => {
+module.exports = (passport) => {
     passport.use(
         new LocalStrategy((login, password, done) => {
             usersController.GetUserByLogin({ params: login}, (err, user) => {

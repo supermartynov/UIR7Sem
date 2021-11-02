@@ -1,3 +1,3 @@
-import {usersController} from "./usersController.js";
+const usersController = require("./usersController.js");
 
-export {usersController}
+module.exports = {usersController}
