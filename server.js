@@ -1,18 +1,16 @@
-let express = require("express")
-let cors = require('cors')
-let bodyparser = require('body-parser')
-let session = require("express-session")
-let passport = require('passport')
-let crypto = require('crypto')
-let localStrategy = require("./config/passport.js");
-let {sequelize} = require("./config/db.js");
-let SequilizeStore = require("connect-session-sequelize")(session.Store)
-let routerAuthRegDashboard = require('./routes/account.js')
+const express = require("express")
+const cors = require('cors')
+const bodyparser = require('body-parser')
+const session = require("express-session")
+const {sequelize} = require("./config/db.js");
+const SequilizeStore = require("connect-session-sequelize")(session.Store)
+const routerAuthRegDashboard = require('./routes/account.js')
+const usersController = require("./controllers/usersController");
 
 
-require("dotenv").config()
 
 const app = express()
+
 app.use(bodyparser.json())
 app.use(express.json())
 app.use(cors())
@@ -37,15 +35,12 @@ app.use(
 );
 sessionStore.sync()
 
-
 app.use(routerAuthRegDashboard)
-app.use(passport.initialize());
-app.use(passport.session())
-localStrategy(passport)
 
-app.get("/", (req, res) => {
-    res.send(`Главная страница, вы сюда заходили`)
-})
+const passport = require('./config/passport').passport
+app.use(passport.initialize())
+app.use(passport.session()) //serialize , deserialize
+
 
 app.listen(9000, () => {
     console.log("Запустили")

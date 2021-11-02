@@ -1,36 +1,65 @@
-let userController = require("../controllers/index.js");
-let User = require("../model/users.js");
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+const User = require('../model/users.js')
+const validPassword = require('./pswrd').validPassword
 
-let LocalStrategy = require('passport-local').Strategy;
 
-module.exports = (passport) => {
-    passport.use(
-        new LocalStrategy((login, password, done) => {
-            usersController.GetUserByLogin({ params: login}, (err, user) => {
-                if (err) {
-                    return done(err, false);
-                }
-                if (!user) {
-                    return done(null, false, { msg: "Incorrect username" });
-                }
-                if (user.password !== password) {
-                    return done(null, false, { msg: "Incorrect password" });
-                }
-                return done(null, user);
-            });
-        })
-    );
+//1) verify callback for LocalStrategy
 
-    passport.serializeUser(function (user, done) { //сериализация, что будем хранить в сессии
-        console.log('serialization', user);
-        done(null, user.id);
-    });
+//после post запроса, middleware passport сам найдет userName и password и подставит в verifyCallback
+//чтобы не допустить ошибок из-за разных наименований нужно создать customFields
 
-    passport.deserializeUser((id, done) => { //десериализация
-        User.findByPk(id)
-            .then((user) => {
-                done(null, user)
-            })
-            .catch(err => done(err))
-    });
+let customFields = {
+    usernameField: 'username',
+    passwordField: 'password'
 }
+
+const verifyCallback = (username, password, done) => {
+    console.log("aaaaaaAAA")
+    console.log("aaaaaaAAA")
+    console.log("aaaaaaAAA")
+    console.log("aaaaaaAAA")
+    console.log("aaaaaaAAA")
+    console.log("aaaaaaAAA")
+    console.log("aaaaaaAAA")
+    User.findOne({where: { username: username}})
+        .then((user) => {
+
+            if (!user) {
+                return done(null, false)  //это не ошибка, но passport веренет unAuthoried HTTP status
+            }
+
+            const isValid = validPassword(password, user.hash, user.salt)
+
+            if (isValid) {
+                return done(null, user)
+            } else {
+                return done(null, false)
+            }
+        })
+        .catch(err => {
+        console.log(err)
+    })
+
+
+} //done определяет результаты верификации
+
+const strategy = new LocalStrategy(customFields, verifyCallback);
+
+passport.use(strategy)
+
+passport.serializeUser((user, done) => {
+    console.log("serialize")
+    done(null, user.id)
+})
+
+passport.deserializeUser((userId, done) => {
+    console.log("deserialize")
+    User.findByPk(userId)
+        .then((user) => {
+            done(null, user)
+        })
+        .catch(err => done(err))
+})
+
+module.exports.passport = passport;

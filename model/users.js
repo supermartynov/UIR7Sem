@@ -12,7 +12,7 @@ User.init({
         type: Sequelize.STRING,
         allowNull: false
     },
-    login: {
+    username: {
         type: Sequelize.STRING,
         allowNull: false,
     },
@@ -20,17 +20,20 @@ User.init({
         type: Sequelize.STRING,
         allowNull: false,
     },
-    password: {
+    hash: {
         type: Sequelize.STRING,
-        allowNull: false
-    }
+        //allowNull: false
+    },
+    sault: {
+        type: Sequelize.STRING,
+        //allowNull: false
+    },
+
 }, {
     sequelize,
     modelName: 'users',
     timestamps: false
     }
 )
-
-// await sequelize.sync(({ force: true }));
 
 module.exports = User
