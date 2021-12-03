@@ -22,11 +22,11 @@ User.init({
     },
     hash: {
         type: Sequelize.STRING,
-        //allowNull: false
+        allowNull: false
     },
-    sault: {
+    salt: {
         type: Sequelize.STRING,
-        //allowNull: false
+        allowNull: false
     },
 
 }, {
@@ -36,4 +36,5 @@ User.init({
     }
 )
 
+//sequelize.sync({force: true})
 module.exports = User
