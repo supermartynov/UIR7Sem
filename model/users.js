@@ -10,7 +10,7 @@ User.init({
     },
     name: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     username: {
         type: Sequelize.STRING,

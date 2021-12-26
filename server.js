@@ -31,20 +31,22 @@ app.use(
     })
 );
 
-sessionStore.sync()
+//sessionStore.sync()
 
 require('./security_stuff/passport')(passport) //функция, в которой passport будет сказано использовать LocalStratrgy
 app.use(passport.initialize())
 app.use(passport.session())
-
 app.use((req, res, next) => {
-    console.log(req.session);
-    console.log(req.user);
+    console.log(req.body);
     next();
 })
 
 app.use(routerAuthRegDashboard) //роуты можно стаивть только после use(passport)
-
+app.use((req, res, next) => {
+    //console.log(req.session);
+    //console.log(req.user);
+    next();
+})
 
 app.listen(9000, () => {
     console.log("Запустили")

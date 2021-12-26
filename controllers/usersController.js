@@ -11,11 +11,9 @@ usersController.create = async (req, res) => {
     body.hash = saltHash.hash;
     try {
         const item = await User.create(body)
-        res.redirect('/login');
         return res.status(200).send(item)
     } catch (err) {
         console.log(err)
-        res.redirect('/login');
         return res.status(400).send(err)
     }
 }

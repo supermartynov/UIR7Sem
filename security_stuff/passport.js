@@ -8,6 +8,8 @@ let customFields = {
 }
 
 const verifyCallback = (username, password, done) => {
+    console.log(username)
+    console.log(password)
     User.findOne({where: { username: username}})
         .then(async (user) => {
 
