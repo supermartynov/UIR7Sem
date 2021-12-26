@@ -9,7 +9,7 @@ router.post("/register", usersController.create)
 
 router.post('/login', passport.authenticate('local'), (req, res, next) => {
     res.send(req.body)
-}) //failureRedirect
+})
 
 router.get('/dashboard', isAuth, (req, res) => {
     res.send(req.user);

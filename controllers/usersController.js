@@ -5,6 +5,12 @@ const genPassword = require("../security_stuff/pswrd").genPassword;
 const usersController = genericCrud(User)
 
 usersController.create = async (req, res) => {
+    console.log(req.body.username)
+    if (await usersController.getUserByLogin(req, res)
+        || await usersController.getUserByEmail(req, res))
+    {
+        return res.status(422)
+    }
     let body = req.body;
     const saltHash = genPassword(body.password);
     body.salt = saltHash.salt;
@@ -18,11 +24,26 @@ usersController.create = async (req, res) => {
     }
 }
 
-usersController.GetUserByLogin = async ({ params: {login}}, res) => {
+usersController.getUserByLogin = async (req, res) => {
+    let username = req.body.username
     try {
         const item = User.findAll({
             where: {
-                login: login
+                username: username
+            }
+        })
+        res.status(200).send(item)
+    } catch (err) {
+        res.status(400).send(err)
+    }
+}
+
+usersController.getUserByEmail= async (req, res) => {
+    let email = req.body.email;
+    try {
+        const item = User.findAll({
+            where: {
+                email: email
             }
         })
         res.status(200).send(item)
