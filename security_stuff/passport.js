@@ -3,26 +3,14 @@ const User = require('../model/users.js')
 const validPassword = require('./pswrd').validPassword
 
 let customFields = {
-    usernameField: 'username',
+    emailField: 'email',
     passwordField: 'password'
 }
 
-const verifyCallback = (username, password, done) => {
-    console.log(username)
+const verifyCallback = (email, password, done) => {
     console.log(password)
-    User.findOne({where: { username: username}})
+    User.findOne({where: { email: email}})
         .then(async (user) => {
-
-            if (!user) {
-                await User.findOne({where: { email: username}})
-                    .then((userByEmail) => {
-                        if (!userByEmail) {
-                            return done(null, false); //это не ошибка, но passport веренет unAuthoried HTTP status
-                        } else {
-                            user = userByEmail;
-                        }
-                })
-            }
 
             const isValid = validPassword(password, user.hash, user.salt)
 

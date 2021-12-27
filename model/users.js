@@ -12,10 +12,6 @@ User.init({
         type: Sequelize.STRING,
         allowNull: true
     },
-    username: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
     email : {
         type: Sequelize.STRING,
         allowNull: false,
