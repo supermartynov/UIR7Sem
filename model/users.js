@@ -18,12 +18,16 @@ User.init({
     },
     hash: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
     salt: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     },
+    socialId: {
+        type: Sequelize.STRING,
+        allowNull: true
+    }
 
 }, {
     sequelize,

@@ -1,4 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy
+var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+const Config = require('./config');
+
+
 const User = require('../model/users.js')
 const validPassword = require('./pswrd').validPassword
 
@@ -7,8 +11,13 @@ let customFields = {
     passwordField: 'password'
 }
 
+let customFielsForGoogle = {
+    clientID: Config.oauth.googleAuth.clientID,
+    clientSecret: Config.oauth.googleAuth.clientSecret,
+    callbackURL: Config.oauth.googleAuth.callbackURL
+}
+
 const verifyCallback = (email, password, done) => {
-    console.log(password)
     User.findOne({where: { email: email}})
         .then(async (user) => {
 
@@ -23,20 +32,41 @@ const verifyCallback = (email, password, done) => {
         .catch(err => {
         console.log(err)
     })
+}
 
+const verifyCallbackForGoogle = (request, accessToken, refreshToken, profile, done) => {
+    console.log(profile)
+    User.findOne({where: { email: profile.emails[0].value}})
+        .then(async (user) => {
+            if (user) {
+                return done(null, user)
+            } else if (!user) {
+                let user = User.create({
+                    name: profile.name.givenName,
+                    email: profile.emails[0].value,
+                    socialId: profile.id
+                })
+                return done(null, user)
+            }
+        })
+        .catch(err => {
+           return done(err, null)
+        })
 }
 
 const strategy = new LocalStrategy(customFields, verifyCallback)
+const googleStrategy = new GoogleStrategy(customFielsForGoogle, verifyCallbackForGoogle)
 
 module.exports = (passport) => {
     passport.use(strategy)
+    passport.use(googleStrategy);
 
-    passport.serializeUser((user, done) => {
-        done(null, user.id)
+    passport.serializeUser((user, done) => { //какие данные заносим в сессию
+        done(null, user)
     })
 
-    passport.deserializeUser((userId, done) => {
-        User.findByPk(userId)
+    passport.deserializeUser((user, done) => {  //поиск данных в сессии по определенному ключу
+        User.findByPk(user.id)
             .then((user) => {
                 done(null, user)
             })
