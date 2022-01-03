@@ -10,7 +10,7 @@ const app = express()
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors())
+app.use(cors({credentials: true, origin: 'http://localhost:8080'}))
 
 let sessionStore = new SequilizeStore({ //создаем sessionStore в бд
     db: sequelize,
@@ -37,14 +37,13 @@ require('./security_stuff/passport')(passport) //функция, в которо
 app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
-    console.log(req.body);
     next();
 })
 
 app.use(routerAuthRegDashboard) //роуты можно стаивть только после use(passport)
 app.use((req, res, next) => {
-    //console.log(req.session);
-    //console.log(req.user);
+    /*console.log(req.session);
+    console.log(req.user);*/
     next();
 })
 

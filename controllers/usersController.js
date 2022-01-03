@@ -5,7 +5,6 @@ const genPassword = require("../security_stuff/pswrd").genPassword;
 const usersController = genericCrud(User)
 
 usersController.create = async (req, res) => {
-    console.log(req.body.email)
     const isAlreadyExistAccount = await usersController.getUserByEmail(req, res);
     if (isAlreadyExistAccount.length !== 0) {
         return res.status(409).send()

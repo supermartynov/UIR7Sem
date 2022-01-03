@@ -2,7 +2,6 @@ const LocalStrategy = require('passport-local').Strategy
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const Config = require('./config');
 
-
 const User = require('../model/users.js')
 const validPassword = require('./pswrd').validPassword
 
@@ -62,11 +61,11 @@ module.exports = (passport) => {
     passport.use(googleStrategy);
 
     passport.serializeUser((user, done) => { //какие данные заносим в сессию
-        done(null, user)
+        done(null, user.id)
     })
 
-    passport.deserializeUser((user, done) => {  //поиск данных в сессии по определенному ключу
-        User.findByPk(user.id)
+    passport.deserializeUser((userId, done) => {  //поиск данных в сессии по определенному ключу
+        User.findByPk(userId)
             .then((user) => {
                 done(null, user)
             })
