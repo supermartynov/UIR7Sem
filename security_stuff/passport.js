@@ -17,6 +17,7 @@ let customFielsForGoogle = {
 }
 
 const verifyCallback = (email, password, done) => {
+    console.log(email)
     User.findOne({where: { email: email}})
         .then(async (user) => {
 
@@ -29,15 +30,14 @@ const verifyCallback = (email, password, done) => {
             }
         })
         .catch(err => {
-        console.log(err)
+            return done(null, false)
     })
 }
 
 const verifyCallbackForGoogle = (request, accessToken, refreshToken, profile, done) => {
-    console.log(profile)
     User.findOne({where: { email: profile.emails[0].value}})
         .then(async (user) => {
-            if (user) {
+            if (await user) {
                 return done(null, user)
             } else if (!user) {
                 let user = User.create({
@@ -60,12 +60,12 @@ module.exports = (passport) => {
     passport.use(strategy)
     passport.use(googleStrategy);
 
-    passport.serializeUser((user, done) => { //какие данные заносим в сессию
-        done(null, user.id)
+    passport.serializeUser(async (user, done) => {
+         done(null, await user)
     })
 
-    passport.deserializeUser((userId, done) => {  //поиск данных в сессии по определенному ключу
-        User.findByPk(userId)
+    passport.deserializeUser((user, done) => {
+        User.findByPk(user.id)
             .then((user) => {
                 done(null, user)
             })
