@@ -1,5 +1,5 @@
-const config = {}
-config.oauth = {
+const passportSocialNetworksConfig = {}
+passportSocialNetworksConfig.oauth = {
     'googleAuth' : {
         'clientID': '880306032440-i1lnt9jdlrebeau67tcq79jba0bvppa2.apps.googleusercontent.com',
         'clientSecret': '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',
@@ -7,4 +7,4 @@ config.oauth = {
     },
 };
 
-module.exports = config;
+module.exports = passportSocialNetworksConfig;

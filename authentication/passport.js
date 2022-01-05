@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
-const Config = require('./config');
+const Config = require('./passportSocialNetworksConfig');
 
 const User = require('../model/users.js')
 const validPassword = require('./pswrd').validPassword

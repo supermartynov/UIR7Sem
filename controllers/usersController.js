@@ -1,6 +1,6 @@
 let genericCrud  = require('./genericController.js')
 let User = require ('../model/users.js');
-const genPassword = require("../security_stuff/pswrd").genPassword;
+const genPassword = require("../authentication/pswrd").genPassword;
 
 const usersController = genericCrud(User)
 

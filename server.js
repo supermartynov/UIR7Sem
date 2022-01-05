@@ -33,7 +33,7 @@ app.use(
 
 //sessionStore.sync()
 
-require('./security_stuff/passport')(passport)
+require('./authentication/passport')(passport)
 app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
