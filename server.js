@@ -1,10 +1,10 @@
 const express = require("express")
 const cors = require('cors')
 const session = require("express-session")
-const {sequelize} = require("./config/db.js");
+const {sequelize} = require("./db_config/db.js");
 const passport = require("passport")
 const SequilizeStore = require("connect-session-sequelize")(session.Store)
-const routerAuthRegDashboard = require('./routes/accountRoutes.js')
+const routerAuthRegDashboard = require('./server/routes/accountRoutes.js')
 
 const app = express()
 
@@ -33,7 +33,7 @@ app.use(
 
 //sessionStore.sync()
 
-require('./authentication/passport')(passport)
+require('./server/authentication/passport')(passport)
 app.use(passport.initialize())
 app.use(passport.session())
 app.use((req, res, next) => {
@@ -47,8 +47,9 @@ app.use((req, res, next) => {
 
 app.use(routerAuthRegDashboard) //роуты можно стаивть только после use(passport)
 app.use((req, res, next) => {
-    /*console.log(req.session);
-    console.log(req.user);*/
+    console.log(req.session);
+    console.log(req);
+    console.log("Test")
     next();
 })
 

@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Model, sequelize } = require('../config/db.js');
+const { Sequelize, DataTypes, Model, sequelize } = require('../../db_config/db.js');
 
 
 class User extends Model{}
@@ -9,6 +9,14 @@ User.init({
         autoIncrement: true
     },
     name: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    surname: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    login: {
         type: Sequelize.STRING,
         allowNull: true
     },

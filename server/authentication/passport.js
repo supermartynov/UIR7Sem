@@ -20,7 +20,6 @@ const verifyCallback = (email, password, done) => {
     console.log(email)
     User.findOne({where: { email: email}})
         .then(async (user) => {
-
             const isValid = validPassword(password, user.hash, user.salt)
 
             if (isValid) {
